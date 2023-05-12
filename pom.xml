@@ -1,3 +1,51 @@
+package or.jrichardsz;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Writer;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+
+public class TestMavenPomEdit {
+
+	public static void main(String[] args) throws Exception {
+		
+		//read initial pom
+		Model model = parsePomXmlFileToMavenPomModel("C:\\Users\\User\\Desktop\\initial_pom.xml");
+		
+		//add some pom modification
+		Plugin plugin = new Plugin();
+		plugin.setGroupId("com.jelastic");
+		
+		model.getBuild().addPlugin(plugin);
+		
+		//write new pom
+		parseMavenPomModelToXmlString("C:\\Users\\User\\Desktop\\final_pom.xml", model);
+		
+	}
+	
+	public static Model parsePomXmlFileToMavenPomModel(String path) throws Exception {
+
+		Model model = null;
+		FileReader reader = null;
+		MavenXpp3Reader mavenreader = new MavenXpp3Reader();
+		reader = new FileReader(path);
+	        model = mavenreader.read(reader);
+		return model;
+	
+	}	
+	
+	public static void parseMavenPomModelToXmlString(String path,Model model) throws Exception {
+		MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
+		Writer writer = new FileWriter(path);
+		mavenWriter.write(writer, model);
+	}		
+
+}
+
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -21,3 +69,4 @@
     </dependencies>
 
 </project>
+
